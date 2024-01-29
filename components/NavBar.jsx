@@ -47,7 +47,7 @@ function NavBar() {
 	return (
 		<div className="w-full flex flex-row justify-center items-center bg-[#363636] py-4 gap-y-2">
 			{user ? (
-				<div className="flex flex-col items-center">
+				<div className="w-full flex justify-between items-center px-12">
 					<h1 className="text-white">
 						Logged in as {user.displayName}
 					</h1>
@@ -70,7 +70,7 @@ function NavBar() {
 				</div>
 			) : (
 				<button
-					className="bg-white text-[#363636] p-2 rounded-md shadow-sm shadow-white hover:bg-slate-200"
+					className="bg-white text-[#363636] ml-auto mr-12 p-2 rounded-md shadow-sm shadow-white hover:bg-slate-200 "
 					onClick={signInWithGoogle}
 				>
 					Login with Google
