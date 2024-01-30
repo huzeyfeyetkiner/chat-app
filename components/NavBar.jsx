@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 
 import {
@@ -12,10 +12,10 @@ import {
 import app from "../app/firebase"
 
 function NavBar() {
-	const [user, setUser] = useState(null)
 	const provider = new GoogleAuthProvider()
 	const auth = getAuth(app)
 	const router = useRouter()
+	const [user, setUser] = useState(null)
 
 	const signInWithGoogle = () => {
 		signInWithPopup(auth, provider)
@@ -44,12 +44,17 @@ function NavBar() {
 			})
 	}
 
+	useEffect(() => {
+		console.log(auth.currentUser)
+		setUser(auth.currentUser)
+	}, [])
+
 	return (
 		<div className="w-full flex flex-row justify-center items-center bg-[#363636] py-4 gap-y-2">
-			{user ? (
+			{user !== null ? (
 				<div className="w-full flex justify-between items-center px-12">
 					<h1 className="text-white">
-						Logged in as {user.displayName}
+						Logged in as {auth?.currentUser?.displayName}
 					</h1>
 					<button
 						className="bg-white text-[#363636] p-2 rounded-md shadow-sm shadow-white hover:bg-slate-200"
