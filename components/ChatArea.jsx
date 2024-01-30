@@ -12,11 +12,14 @@ import {
 	query,
 	limit,
 } from "firebase/firestore"
+import { useAuth } from "@/context/AuthContext"
 
 import { getAuth } from "firebase/auth"
 import ChatMessage from "./ChatMessage"
+import { useRouter } from "next/navigation"
 
 function ChatArea() {
+	const router = useRouter()
 	const auth = getAuth(app)
 	const db = getFirestore(app)
 
@@ -24,6 +27,7 @@ function ChatArea() {
 	const [messages, setMessages] = useState([])
 
 	const messagesEndRef = useRef(null)
+	const { user } = useAuth()
 
 	const sendMessage = async (e) => {
 		e.preventDefault()
@@ -67,17 +71,19 @@ function ChatArea() {
 		messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
 	}, [messages])
 
+	if (!user) router.push("/")
+
 	return (
 		<div className="w-full flex flex-col items-center justify-center gap-y-2">
 			<p className="text-4xl text-white font-medium mb-4">
 				Merhaba {auth?.currentUser?.displayName}
 			</p>
-			<div className="min-w-96 w-2/3 h-96 bg-white rounded-lg p-12  overflow-scroll overflow-y-auto mx-auto">
+			<div className="relative min-w-96 w-2/3 h-96 bg-white rounded-lg p-12  overflow-scroll overflow-y-auto mx-auto">
 				{messages &&
 					messages.map((msg) => {
 						return <ChatMessage key={msg.id} message={msg} />
 					})}
-				<div ref={messagesEndRef} />
+				<div className="h-1 mt-6" ref={messagesEndRef} />
 			</div>
 
 			<form

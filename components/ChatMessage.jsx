@@ -10,7 +10,7 @@ function ChatMessage({ message }) {
 	return (
 		<div
 			className={`w-fit max-w-96 flex flex-row items-center justify-evenly my-2 bg-yellow-100 p-4 rounded-xl gap-x-3 ${
-				auth.currentUser.uid == uid && "flex-row-reverse ml-auto"
+				auth?.currentUser?.uid == uid && "flex-row-reverse ml-auto"
 			}`}
 		>
 			<Image

@@ -7,15 +7,29 @@ import {
 	getAuth,
 	signInWithPopup,
 	signOut,
+	onAuthStateChanged,
 } from "firebase/auth"
 
 import app from "../app/firebase"
+import { useAuth } from "@/context/AuthContext"
 
 function NavBar() {
 	const provider = new GoogleAuthProvider()
 	const auth = getAuth(app)
 	const router = useRouter()
-	const [user, setUser] = useState(null)
+
+	const { user, setUser } = useAuth()
+
+	useEffect(() => {
+		const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+			if (currentUser) {
+				setUser(currentUser)
+				router.push("/chat")
+			}
+		})
+
+		return () => unsubscribe() // Cleanup subscription on unmount
+	}, [auth, router, setUser])
 
 	const signInWithGoogle = () => {
 		signInWithPopup(auth, provider)
@@ -46,7 +60,7 @@ function NavBar() {
 
 	return (
 		<div className="w-full flex flex-row justify-center items-center bg-[#363636] py-4 gap-y-2">
-			{user !== null ? (
+			{user ? (
 				<div className="w-full flex justify-between items-center px-12">
 					<h1 className="text-white">
 						Logged in as {auth?.currentUser?.displayName}
