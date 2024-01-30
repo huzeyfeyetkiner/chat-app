@@ -44,11 +44,6 @@ function NavBar() {
 			})
 	}
 
-	useEffect(() => {
-		console.log(auth.currentUser)
-		setUser(auth.currentUser)
-	}, [])
-
 	return (
 		<div className="w-full flex flex-row justify-center items-center bg-[#363636] py-4 gap-y-2">
 			{user !== null ? (
